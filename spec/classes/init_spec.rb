@@ -135,6 +135,14 @@ describe 'consul' do
     it { should contain_package('consul').with(:ensure => 'latest') }
   end
 
+  context 'When requesting to install UI but package_name and ui_package_name equal' do
+    let(:params) {{
+      :install_method  => 'package',
+      :ui_package_name => 'consul',
+      }}
+      it { should compile }
+  end
+
   context 'When requesting to install UI via a custom package and version' do
     let(:params) {{
       :install_method    => 'package',

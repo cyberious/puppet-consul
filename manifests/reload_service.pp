@@ -19,9 +19,14 @@ class consul::reload_service {
       $rpc_addr = $::consul::rpc_addr
     }
 
+    if $consul::installing_version != 'latest' and (versioncmp($consul::installing_version,'0.8.0') < 0) {
+      $reload_command = "consul reload -rpc-addr=${rpc_addr}:${consul::rpc_port}"
+    } else {
+      $reload_command = "consul reload"
+    }
     exec { 'reload consul service':
       path        => [$::consul::bin_dir,'/bin','/usr/bin'],
-      command     => "consul reload -rpc-addr=${rpc_addr}:${consul::rpc_port}",
+      command     => $reload_command,
       refreshonly => true,
       tries       => 3,
     }

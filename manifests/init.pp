@@ -248,6 +248,12 @@ class consul (
     create_resources(consul_acl, $acls)
   }
 
+  $installing_version = $install_method ? {
+    'package' => $package_ensure,
+    'url'     => $version,
+    default   => $version,
+  }
+
   $notify_service = $restart_on_change ? {
     true    => Class['consul::run_service'],
     default => undef,
